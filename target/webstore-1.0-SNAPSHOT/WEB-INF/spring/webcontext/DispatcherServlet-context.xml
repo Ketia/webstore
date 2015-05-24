@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:context="http://www.springframework.org/schema/context"
+        xmlns:mvc="http://www.springframework.org/schema/mvc"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
+	<!-- By this tag, we tell Spring MVC to configure the DefaultAnnotationHandlerMapping,
+	AnnotationMethodHandlerAdapter, and ExceptionHandlerExceptionResolver
+	beans. These beans are required for Spring MVC to dispatch requests to the controllers.
+	Actually <mvc:annotation-driven /> does many things behind the screen. It also
+	enables support for various convenient annotations such as @NumberFormat and
+	@DateTimeFormat to format the form bean fields during form binding. Similarly, we have
+	the @Valid annotation to validate the controller method's parameters. It also supports Java
+	objects to/from an XML or JSON conversion via the @RequestBody and @ResponseBody
+	annotations in the @RequestMapping or @ExceptionHandler method during form
+	binding. -->
+	<!-- **************** -->
+	<mvc:annotation-driven />
+	
+	<!-- we can hand over that task to Spring
+	via the autodetection mechanism. To enable the autodetection of the @Controller
+	annotated classes, we need to add component scanning to our configuration using the
+	<context:component-scan> tag. Spring will create beans (objects) for every @Controller class at runtime. The dispatcher
+	servlet will search for the correct request mapping method in every @Controller bean
+	based on the @RequestMapping annotation, to serve a web request. The base-package
+	property of a <context:component-scan> tag indicates the package under which Spring
+	should search for controller classes to create beans:
+	<context:component-scan base-package="com.packt.webstore" />
+	The preceding line instructs Spring to search for controller classes within the com.packt.
+	webstore package and its subpackages. it also detects other stereotypes such
+	as repositories (@Repository) and services (@Service).-->
+	<!-- *************************************************** -->
+	<context:component-scan base-package="com.ketia.webstore"/>
+        <!--<mvc:default-servlet-handler/>-->
+	<!-- A view resolver helps the dispatcher servlet identify the views that have to be rendered
+	as the response for a specific web request. Spring MVC provides various view resolver
+	implementations to identify views, and InternalResourceViewResolver is one such
+	implementation. The final tag in the web application context configuration is the bean
+	definition for the InternalResourceViewResolver class as follows: -->
+	<!-- *********************************************************************** -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<!-- The prefix property value of the InternalResourceViewResolver bean
+			definition in DispatcherServlet-context.xml; that is, /WEB-INF/views/
+			 The return value of the welcome method from the HomeController class; that is, welcome
+			 Finally, the suffix property value of the InternalResourceViewResolver bean,
+			that is, .jsp -->
+            <!--<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />-->
+            <property name="prefix" value="/WEB-INF/views/"/>
+            <property name="suffix" value=".jsp" />
+	</bean>
+	
+	<!--<mvc:resources mapping="/resources/**" location="/resources/themes/css/"/>-->
+</beans>

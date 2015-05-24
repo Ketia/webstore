@@ -1,0 +1,16 @@
+com\ketia\webstore\domain\Product.class
+com\ketia\webstore\domain\repository\CustomerRepository.class
+com\ketia\webstore\domain\Customer.class
+com\ketia\webstore\controller\ProductController.class
+com\ketia\webstore\service\OrderService.class
+com\ketia\webstore\controller\OrderController.class
+com\ketia\webstore\domain\repository\impl\DefaultCustomerRepository.class
+com\ketia\webstore\domain\repository\ProductRepository.class
+com\ketia\webstore\service\impl\DefaultCustomerService.class
+com\ketia\webstore\service\ProductService.class
+com\ketia\webstore\service\CustomerService.class
+com\ketia\webstore\service\impl\DefaultProductService.class
+com\ketia\webstore\domain\repository\impl\DefaultProductRepository.class
+com\ketia\webstore\service\impl\DefaultOrderService.class
+com\ketia\webstore\controller\HomeController.class
+com\ketia\webstore\controller\CustomerController.class
