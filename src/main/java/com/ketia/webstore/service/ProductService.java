@@ -15,4 +15,5 @@ import com.ketia.webstore.domain.Product;
 
 public interface ProductService {
 	public List<Product> getAllProducts();
+        public List<Product> getProductsByCategory(String category);
 }

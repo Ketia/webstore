@@ -32,17 +32,6 @@
 				</div>
 			</c:forEach>
 		</div>
-		
-		<div class="col-sm-6 col-md-3" style="padding-bottom: 15px">
-			<div class="thumbnail">
-				<div class="caption">
-					<h3>${product1.name}</h3>
-					<p>${product1.description}</p>
-					<p>${product1.unitPrice} USD</p>
-					<p>Available ${product1.unitsInStock} units in stock</p>
-				</div>
-			</div>
-		</div>
 	</section>
 </body>
 </html>

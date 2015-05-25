@@ -27,7 +27,7 @@ public class HomeController {
  *      @return 
  */
     @RequestMapping("/")
-    public String welcome(Model model) {
+    public String welcomeMethod(Model model) {
         model.addAttribute("greeting", "Welcome to Spring MVC!");
         model.addAttribute("tagline", "This is the first time to use Spring MVC.");
         return "welcome";

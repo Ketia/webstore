@@ -30,5 +30,10 @@ public class DefaultProductService implements
 	public List<Product> getAllProducts() {
 		return productRepository.getAllProducts();
 	}
+
+    @Override
+    public List<Product> getProductsByCategory(String category) {
+        return this.productRepository.getProductsByCategory(category);
+    }
 }
 

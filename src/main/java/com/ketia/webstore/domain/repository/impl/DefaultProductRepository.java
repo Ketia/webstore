@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Repository;
 import com.ketia.webstore.domain.Product;
+import java.util.stream.Collectors;
 
 /**
  * 	Spring Framework assigns the
@@ -55,10 +56,17 @@ public class DefaultProductRepository implements ProductRepository{
 		tablet_Asus.setManufacturer("AMAZON");
 		tablet_Asus.setUnitsInStock(1600);
 		
+                Product iphone1 = new Product("P1234","iPhone 6+", new BigDecimal(500));
+		iphone1.setDescription("Apple iPhone 6+ smartphone with 5.00-inch 840x1866 display and 12-megapixel rear camera");
+		iphone1.setCategory("Smart Phone");
+		iphone1.setManufacturer("Apple");
+		iphone1.setUnitsInStock(500);
+                
 		listOfProducts.add(iphone);
 		listOfProducts.add(laptop_dell);
 		listOfProducts.add(tablet_Nexus);
 		listOfProducts.add(tablet_Asus);
+                listOfProducts.add(iphone1);
 	}
 	public List<Product> getAllProducts() {
 		return listOfProducts;
@@ -77,4 +85,11 @@ public class DefaultProductRepository implements ProductRepository{
 		}
 		return productById;
 	}
+
+    @Override
+    public List<Product> getProductsByCategory(String category) {
+        return this.listOfProducts.stream()
+                .filter(p -> p.getCategory().equalsIgnoreCase(category))
+                .collect(Collectors.toList());
+    }
 }
