@@ -16,6 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Repository;
 import com.ketia.webstore.domain.Product;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -50,23 +53,30 @@ public class DefaultProductRepository implements ProductRepository{
 		tablet_Nexus.setManufacturer("Google");
 		tablet_Nexus.setUnitsInStock(1000);
 		
-		Product tablet_Asus = new Product("P1236","Asus Fire", new BigDecimal(670));
+		Product tablet_Asus = new Product("P1237","Asus Fire", new BigDecimal(670));
 		tablet_Asus.setDescription("Amazon Asus Fire is the lightest7 inch tablet With a quad-core Qualcomm Snapdragon™ S7 Proprocessor");
 		tablet_Asus.setCategory("Tablet");
 		tablet_Asus.setManufacturer("AMAZON");
 		tablet_Asus.setUnitsInStock(1600);
 		
-                Product iphone1 = new Product("P1234","iPhone 6+", new BigDecimal(500));
+                Product iphone1 = new Product("P1238","iPhone 6", new BigDecimal(500));
 		iphone1.setDescription("Apple iPhone 6+ smartphone with 5.00-inch 840x1866 display and 12-megapixel rear camera");
 		iphone1.setCategory("Smart Phone");
 		iphone1.setManufacturer("Apple");
-		iphone1.setUnitsInStock(500);
+		iphone1.setUnitsInStock(530);
+                
+                Product tablet_Asus_1 = new Product("P1239","Asus Super Fire", new BigDecimal(670));
+		tablet_Asus_1.setDescription("Amazon Asus Fire is the lightest7 inch tablet With a quad-core Qualcomm Snapdragon™ S7 Proprocessor");
+		tablet_Asus_1.setCategory("Tablet");
+		tablet_Asus_1.setManufacturer("AMAZON");
+		tablet_Asus_1.setUnitsInStock(1600);
                 
 		listOfProducts.add(iphone);
 		listOfProducts.add(laptop_dell);
 		listOfProducts.add(tablet_Nexus);
 		listOfProducts.add(tablet_Asus);
                 listOfProducts.add(iphone1);
+                 listOfProducts.add(tablet_Asus_1);
 	}
 	public List<Product> getAllProducts() {
 		return listOfProducts;
@@ -91,5 +101,25 @@ public class DefaultProductRepository implements ProductRepository{
         return this.listOfProducts.stream()
                 .filter(p -> p.getCategory().equalsIgnoreCase(category))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Set<Product> getProductsByFilter(Map<String, List<String>> filterParam) {
+        Set<Product> productByBrand = new HashSet<Product>();
+        Set<Product> productByCategory = new HashSet<Product>();
+        Set<String> criterias = filterParam.keySet();
+        if(criterias.contains("brand")){
+            filterParam.get("brand").stream()
+                                    .forEach((brand) -> {this.listOfProducts.stream().filter(p -> p.getManufacturer().equalsIgnoreCase(brand))
+                                            .forEach((p) -> {productByBrand.add(p);});});
+        }
+        
+        if(criterias.contains("category")){
+            filterParam.get("category").stream()
+                                       .forEach((category) -> {productByCategory.addAll(this.getProductsByCategory(category));});
+        }
+        
+        productByCategory.retainAll(productByBrand);
+        return productByCategory;
     }
 }

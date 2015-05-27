@@ -18,6 +18,8 @@ import org.springframework.stereotype.Service;
 import com.ketia.webstore.domain.Product;
 import com.ketia.webstore.domain.repository.ProductRepository;
 import com.ketia.webstore.service.ProductService;
+import java.util.Map;
+import java.util.Set;
 
 @Service
 public class DefaultProductService implements 
@@ -34,6 +36,11 @@ public class DefaultProductService implements
     @Override
     public List<Product> getProductsByCategory(String category) {
         return this.productRepository.getProductsByCategory(category);
+    }
+
+    @Override
+    public Set<Product> getProductsByFilter(Map<String, List<String>> filterParam) {
+        return this.productRepository.getProductsByFilter(filterParam);
     }
 }
 

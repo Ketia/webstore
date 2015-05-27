@@ -18,7 +18,7 @@
 	annotations in the @RequestMapping or @ExceptionHandler method during form
 	binding. -->
 	<!-- **************** -->
-	<mvc:annotation-driven />
+	<mvc:annotation-driven enable-matrix-variables="true"/>
 	
 	<!-- we can hand over that task to Spring
 	via the autodetection mechanism. To enable the autodetection of the @Controller

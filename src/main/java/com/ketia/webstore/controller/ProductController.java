@@ -2,9 +2,12 @@ package com.ketia.webstore.controller;
 
 
 import com.ketia.webstore.service.ProductService;
+import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.MatrixVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -41,8 +44,8 @@ public class ProductController {
      */
     @RequestMapping
     public String list(Model model) {
-            model.addAttribute("products", productService.getAllProducts());
-            return "products";
+        model.addAttribute("products", productService.getAllProducts());
+        return "products";
     }
 
     /**
@@ -67,6 +70,16 @@ public class ProductController {
     public String getProductsByCategory(Model model, 
                                         @PathVariable("category") String productCategory){
         model.addAttribute("products", productService.getProductsByCategory(productCategory));
+        return "products";
+    }
+    
+    /**
+     * @MatrixVariable
+     */
+    @RequestMapping("/filter/{ByCriteria}")
+    public String getProductsByFilter(@MatrixVariable(pathVar = "ByCriteria") Map<String, List<String>> filterParam,
+                                        Model model){
+        model.addAttribute("products", productService.getProductsByFilter(filterParam));
         return "products";
     }
 }

@@ -12,8 +12,11 @@ package com.ketia.webstore.service;
 
 import java.util.List;
 import com.ketia.webstore.domain.Product;
+import java.util.Map;
+import java.util.Set;
 
 public interface ProductService {
 	public List<Product> getAllProducts();
         public List<Product> getProductsByCategory(String category);
+        public Set<Product> getProductsByFilter(Map<String, List<String>> filterParam);
 }
