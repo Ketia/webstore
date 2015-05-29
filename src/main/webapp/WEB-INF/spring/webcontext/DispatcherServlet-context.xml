@@ -16,7 +16,7 @@
 	the @Valid annotation to validate the controller method's parameters. It also supports Java
 	objects to/from an XML or JSON conversion via the @RequestBody and @ResponseBody
 	annotations in the @RequestMapping or @ExceptionHandler method during form
-	binding. -->
+	binding. enable-matrix-variables="true" to enable @MatrixVariable in Controller. -->
 	<!-- **************** -->
 	<mvc:annotation-driven enable-matrix-variables="true"/>
 	
