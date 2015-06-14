@@ -18,6 +18,7 @@
 	annotations in the @RequestMapping or @ExceptionHandler method during form
 	binding. enable-matrix-variables="true" to enable @MatrixVariable in Controller. -->
 	<!-- **************** -->
+        
 	<mvc:annotation-driven enable-matrix-variables="true"/>
 	
 	<!-- we can hand over that task to Spring
@@ -52,5 +53,12 @@
             <property name="suffix" value=".jsp" />
 	</bean>
 	
-	<!--<mvc:resources mapping="/resources/**" location="/resources/themes/css/"/>-->
+        <bean id ="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+            <property name="basename" value="messages"/>
+        </bean>
+        
+        <!--Add resource to support web pages such as javaScript, CSS, jquery etc.-->
+	<mvc:resources mapping="/*" location="/WEB-INF/resources/themes/css/"/>
+        <!--<mvc:resources mapping="/*" location="/WEB-INF/resources/themes/fonts/"/>-->
+        <!--<mvc:resources mapping="/*" location="/WEB-INF/resources/themes/js/"/>-->
 </beans>

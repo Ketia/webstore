@@ -17,9 +17,12 @@ import java.util.Map;
 import java.util.Set;
 
 public interface ProductRepository {
-	public List<Product> getAllProducts();
-	public Product getProductById(String productID);
-        public List<Product> getProductsByCategory(String category);
-        public Set<Product> getProductsByFilter(Map<String, List<String>> filterParam);
+    public List<Product> getAllProducts();
+    public Product getProductById(String productID);
+    public List<Product> getProductsByCategory(String category);
+    public Set<Product> getProductsByFilter(Map<String, List<String>> filterParam);
+    public List<Product> getProductsByManufacturer(String manufacturer);
+    public Set<Product> getProductsByPriceFilter(Map<String, List<String>> filterParam);
+    public void addProduct(Product product);
 }
 

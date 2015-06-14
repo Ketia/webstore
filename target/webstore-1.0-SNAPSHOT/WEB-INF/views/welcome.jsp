@@ -5,8 +5,8 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-                <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-		<title>Spring MVC</title>
+                <link href="<%= request.getContextPath() %>/bootstrap.min.css" type="text/css" rel="stylesheet" />
+                <title>Spring MVC</title>
 	</head>
 	<body>
 		<section>

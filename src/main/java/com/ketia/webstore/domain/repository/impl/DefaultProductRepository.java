@@ -48,13 +48,13 @@ public class DefaultProductRepository implements ProductRepository{
 		laptop_dell.setUnitsInStock(1000);
 		
 		Product tablet_Nexus = new Product("P1236","Nexus 7", new BigDecimal(300));
-		tablet_Nexus.setDescription("Google Nexus 7 is the lightest7 inch tablet With a quad-core Qualcomm Snapdragon™ S4 Proprocessor");
+		tablet_Nexus.setDescription("Google Nexus 7 is the lightest7 inch tablet With a quad-core Qualcomm S4 Proprocessor");
 		tablet_Nexus.setCategory("Tablet");
 		tablet_Nexus.setManufacturer("Google");
 		tablet_Nexus.setUnitsInStock(1000);
 		
 		Product tablet_Asus = new Product("P1237","Asus Fire", new BigDecimal(670));
-		tablet_Asus.setDescription("Amazon Asus Fire is the lightest7 inch tablet With a quad-core Qualcomm Snapdragon™ S7 Proprocessor");
+		tablet_Asus.setDescription("Amazon Asus Fire is the lightest7 inch tablet With a quad-core Qualcomm S7 Proprocessor");
 		tablet_Asus.setCategory("Tablet");
 		tablet_Asus.setManufacturer("AMAZON");
 		tablet_Asus.setUnitsInStock(1600);
@@ -65,8 +65,8 @@ public class DefaultProductRepository implements ProductRepository{
 		iphone1.setManufacturer("Apple");
 		iphone1.setUnitsInStock(530);
                 
-                Product tablet_Asus_1 = new Product("P1239","Asus Super Fire", new BigDecimal(670));
-		tablet_Asus_1.setDescription("Amazon Asus Fire is the lightest7 inch tablet With a quad-core Qualcomm Snapdragon™ S7 Proprocessor");
+                Product tablet_Asus_1 = new Product("P1240","Asus Super Fire", new BigDecimal(670));
+		tablet_Asus_1.setDescription("Amazon Asus Fire is the lightest7 inch tablet With a quad-core Qualcomm S7 Proprocessor");
 		tablet_Asus_1.setCategory("Tablet");
 		tablet_Asus_1.setManufacturer("AMAZON");
 		tablet_Asus_1.setUnitsInStock(1600);
@@ -121,5 +121,37 @@ public class DefaultProductRepository implements ProductRepository{
         
         productByCategory.retainAll(productByBrand);
         return productByCategory;
+    }
+
+    @Override
+    public List<Product> getProductsByManufacturer(String manufacturer) {
+        return this.listOfProducts.stream()
+                    .filter(p -> p.getManufacturer().equalsIgnoreCase(manufacturer))
+                    .collect(Collectors.toList());
+    }
+
+    @Override
+    public  Set<Product> getProductsByPriceFilter(Map<String, List<String>> filterParam) {
+        Set<Product> productByLowPrice = new HashSet<Product>();
+        Set<Product> productByHighPrice = new HashSet<Product>();
+        if(filterParam.containsKey("low")){
+            Double price = Double.parseDouble(filterParam.get("low").get(0));
+            productByLowPrice.addAll(this.listOfProducts.stream()
+                   .filter(p -> (p.getUnitPrice().doubleValue() >= price))
+                   .collect(Collectors.toList()));
+        }
+        if(filterParam.containsKey("high")){
+            Double price = Double.parseDouble(filterParam.get("high").get(0));
+            productByHighPrice.addAll(this.listOfProducts.stream()
+                   .filter(p -> (p.getUnitPrice().doubleValue() <= price))
+                   .collect(Collectors.toList()));
+        }
+        productByLowPrice.retainAll(productByHighPrice);
+        return productByLowPrice;
+    }
+
+    @Override
+    public void addProduct(Product product) {
+        this.listOfProducts.add(product);
     }
 }

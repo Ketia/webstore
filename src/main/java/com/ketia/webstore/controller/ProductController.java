@@ -1,15 +1,23 @@
 package com.ketia.webstore.controller;
 
 
+import com.ketia.webstore.domain.Product;
 import com.ketia.webstore.service.ProductService;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.MatrixVariable;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /*
@@ -140,5 +148,91 @@ public class ProductController {
                                     Model model){
         model.addAttribute("product",productService.getProductById(productId));
         return "product";
+    }
+    
+    @RequestMapping("/{category}/{price}")
+    public String filterProducts(@PathVariable("category") String category, 
+                                 @MatrixVariable(pathVar = "price") Map<String, List<String>> filterPrice,
+                                 @RequestParam("manufacturer") String manufacturer,
+                                 Model model){
+        Set<Product> productsByPrice = productService.getProductsByPriceFilter(filterPrice);
+        List<Product> productsByCategory = productService.getProductsByCategory(category);
+        List<Product> productsBymanufacturer = productService.getProductsByManufacturer(manufacturer);
+        productsByPrice.retainAll(productsByCategory);
+        productsByPrice.retainAll(productsBymanufacturer);
+        model.addAttribute("products", productsByPrice);
+        return "products";
+    }
+    /**
+     * Display add product form in view
+     * If you observe these methods carefully, you will notice a peculiar thing, which is that both
+        the methods have the same URL mapping value in their @RequestMapping annotation
+        (value = "/add"). So, if we enter the URL http://localhost:8080/webstore/
+        products/add in the browser, which method will Spring MVC map that request to?
+        The answer lies in the second attribute of the @RequestMapping annotation (method =
+        RequestMethod.GET and method = RequestMethod.POST). If you will notice again,
+        even though both methods have the same URL mapping, they differ in request method.
+        So, what is happening behind the screen is that when we enter the URL http://
+        localhost:8080/webstore/products/add in the browser, it is considered as a GET
+        request. So, Spring MVC maps this request to the getAddNewProductForm method, and
+        within this method, we simply attach a new empty Product domain object to the model
+        under the attribute name, newProduct.
+     * @param model
+     * @return 
+     */
+    @RequestMapping(value = "/add", method = RequestMethod.GET)
+    public String getAddNewProductForm(Model model){
+        Product newProduct = new Product();
+        model.addAttribute("newProduct",newProduct);
+        return "addProduct";
+    }
+    /**
+     * now is the time to come back and review our processAddNewProductForm
+        method. When will this method be invoked? This method will be invoked once we press
+        the submit button of our form. Yes, since every form submission is considered as a POST
+        request, this time the browser will send a POST request to the same URL, that is, http://
+        localhost:8080/webstore/products/add.
+        So, this time, the processAddNewProductForm method will get invoked since it is a POST
+        request.
+        * We changed processAddNewProductForm by adding one extra parameter called result,
+        which is of the type BindingResult. Spring MVC will fill this object with the result of
+        the binding. If any attempt is made to bind anything other than the allowed fields, the
+        getSuppressedFields count of the BindingResult object will be greater than zero.
+        That's why, we checked suppressed field count and threw RuntimeException
+     * @param product
+     * @param result 
+     * @return 
+     */
+    
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    public String processAddNewProductForm(@ModelAttribute("newProduct") Product product,
+                                            BindingResult result){
+        String[] suppressedFields = result.getSuppressedFields();
+        if(suppressedFields.length > 0){
+            throw new RuntimeException("Attempt to bind disallowed fields: " + StringUtils.arrayToCommaDelimitedString(suppressedFields));
+        }
+        productService.addProduct(product);
+        return "redirect:/products";
+    }
+    /**
+     * The @InitBinder annotation designates a controller method as a hook method to do some
+        custom configuration regarding data binding on WebDataBinder. And, WebDataBinder
+        is the one that does the data binding at runtime, so we need to specify to WebDataBinder
+        only the fields allowed for binding. If you observe our initialiseBinder method
+        from ProductController, it has a parameter called binder, which is of the type
+        WebDataBinder. We simply call the setAllowedFields method on the binder object
+        and pass the fields' names that are allowed for binding. Spring MVC calls this method to
+        initialize WebDataBinder before binding since it has the @InitBinder annotation.
+        * The WebDataBinder class also has a method called setDisallowedFields
+        to strictly specify the disallowed fields for binding. If you use this method, Spring
+        MVC allows any HTTP request parameters to be bound, except that these field
+        names are specified in the setDisallowedFields method.
+     * @param binder 
+     */
+    
+    @InitBinder
+    public void initialiseBinder(WebDataBinder binder){
+        //Default is setAllowedFields
+        binder.setDisallowedFields("unitsInOrder","discontinued");
     }
 }
